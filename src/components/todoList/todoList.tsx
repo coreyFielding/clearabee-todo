@@ -1,13 +1,10 @@
 import React from 'react'
+import {ITodoListProps, ITodoItemProps} from "./types";
 import classnames from "classnames";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
 
-interface ITodoItem {
-    item: {id: number, task: string, complete: boolean}
-    deleteTodo: (event: any) => void
-    completeTodo: (event: any) => void
-}
-
-const TodoItem = ({item, deleteTodo, completeTodo}: ITodoItem): JSX.Element => {
+const TodoItem = ({item, deleteTodo, completeTodo}: ITodoItemProps): JSX.Element => {
     const deleteItem = (id: number) => deleteTodo(id)
     const completeItem = (id: number) => completeTodo(id)
 
@@ -26,15 +23,30 @@ const TodoItem = ({item, deleteTodo, completeTodo}: ITodoItem): JSX.Element => {
     )
 
     return (
+        <div>
             <div className={TodoItemClasses}>
-                <span className={item.complete ? 'line-through' : ''}>{item.task}</span>
-                <button onClick={() => completeItem(item.id)}>Completed</button>
-                <button onClick={() => deleteItem(item.id)}>delete</button>
+                <span className={item.completed ? 'line-through' : ''}>{item.task}</span>
+                <div className="w-1/5 flex justify-between">
+                    <button onClick={() => completeItem(item.id)}>
+                        <FontAwesomeIcon icon={faCheckCircle} className="hover:text-green-500" style={{color: `${item.completed ? 'green' : ''}`}} />
+                    </button>
+                    <button onClick={() => deleteItem(item.id)}>
+                        <FontAwesomeIcon icon={faTimes} className="hover:text-red-500" />
+                    </button>
+                </div>
             </div>
+            {
+                item.completed && (
+                    <button onClick={() => deleteItem(item.id)} className="bg-red-400 text-white rounded-md p-3 py-2 w-full hover:bg-red-600">Remove task?</button>
+                )
+            }
+
+        </div>
+
     )
 }
 
-export default (props: any) => {
+export default (props: ITodoListProps): JSX.Element => {
     const {todoItems} = props
 
     const todoListClasses = classnames(

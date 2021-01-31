@@ -7,38 +7,40 @@ import classnames from 'classnames'
 interface ITodoItem {
     id: number
     task: string
-    complete: boolean
+    completed: boolean
 }
 
 export default () => {
   const [todoItems, setTodoItems] = useState<ITodoItem[] | any>([])
 
     useEffect(() => {
-        const cachedTodos = localStorage.getItem('todos') || []
-        localStorage.clear()
+        const cachedTodos = JSON.parse(localStorage.getItem('todos') || '[]')
         setTodoItems(cachedTodos)
     }, [])
 
+    useEffect(() => {
+        if (todoItems.length === 0) {
+            localStorage.clear()
+        }
+    }, [todoItems])
+
     const addTodo = (todo: ITodoItem) => {
-      const {task, complete} = todo
-      setTodoItems([...todoItems, {id: todoItems.length, task, complete}])
-      //localStorage.setItem('todos', todoItems)
-  }
+      const {task, completed} = todo
+      setTodoItems([...todoItems, {id: todoItems.length, task, completed}])
+      localStorage.setItem('todos', JSON.stringify(todoItems))
+    }
   const deleteTodo = (index: number) => {
-      const deletedItem = todoItems.splice(index, 1)
-      return setTodoItems(todoItems.filter((item: ITodoItem) => item.id !== deletedItem.id))
+      setTodoItems(todoItems.filter((item: ITodoItem) => item.id !== index))
+
+      return localStorage.setItem('todos', JSON.stringify(todoItems))
   }
 
   const completeTodo = (index: number) => {
       let updateTodos = [...todoItems]
       const completeTodo = todoItems.findIndex((item: ITodoItem) => item.id === index)
-      updateTodos[completeTodo].complete = true
+      updateTodos[completeTodo].completed = updateTodos[completeTodo].completed ? false : true
 
       return setTodoItems([...updateTodos])
-  }
-
-  const undoDeleteTodo = () => {
-
   }
 
   const todoPageClasses = classnames(
@@ -54,7 +56,7 @@ export default () => {
         "rounded-lg",
         "bg-white",
         "p-3",
-        "min-w-64",
+        "w-1/5",
         "shadow-md"
     )
 

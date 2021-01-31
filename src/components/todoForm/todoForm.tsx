@@ -1,11 +1,8 @@
 import React, {useState} from 'react'
+import {ITodoInputProps, ITodoSubmitProps, ITodoFormProps} from "./types";
 import classnames from 'classnames'
 
-type TodoFormProps = {
-    addTodo: (event: any) => void
-}
-
-const TodoInput = ({todo, setTodo}: any) => {
+const TodoInput = ({todo, setTodo}: ITodoInputProps): JSX.Element => {
     const todoInputClasses = classnames(
         "block",
         "border-2",
@@ -15,11 +12,11 @@ const TodoInput = ({todo, setTodo}: any) => {
     )
 
     return (
-        <input type="text" value={todo} placeholder="Start typing..." onChange={(e) => setTodo(e.target.value)} className={todoInputClasses}/>
+        <input type="text" value={todo} placeholder="I need to..." onChange={(e) => setTodo(e.target.value)} className={todoInputClasses}/>
     )
 }
 
-const TodoSubmit = ({todo}: any) => {
+const TodoSubmit = ({todo}: ITodoSubmitProps): JSX.Element => {
     const todoSubmitClasses = classnames(
         "block",
         "text-center",
@@ -41,12 +38,12 @@ const TodoSubmit = ({todo}: any) => {
     )
 }
 
-export default ({addTodo}: TodoFormProps): JSX.Element => {
-    const [todo, setTodo] = useState('')
+export default ({addTodo}: ITodoFormProps): JSX.Element => {
+    const [todo, setTodo] = useState<string | any>('')
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e: React.SyntheticEvent): void => {
         e.preventDefault()
-        addTodo({task: todo, complete: false})
+        addTodo({task: todo, completed: false})
         setTodo('')
     }
 
@@ -59,7 +56,7 @@ export default ({addTodo}: TodoFormProps): JSX.Element => {
         <div className={todoFormClasses}>
             <form onSubmit={handleSubmit}>
                 <TodoInput todo={todo} setTodo={setTodo} />
-                <TodoSubmit todo={todo} addTodo={addTodo} setTodo={setTodo}/>
+                <TodoSubmit todo={todo}/>
             </form>
         </div>
     )
