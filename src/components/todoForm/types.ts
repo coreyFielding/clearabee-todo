@@ -12,4 +12,5 @@ export interface ITodoSubmitProps {
 
 export interface ITodoFormProps {
     addTodo: (event: any) => void
+    todoCount: number
 }

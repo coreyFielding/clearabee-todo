@@ -3,9 +3,9 @@ import ITodoHeaderProps from "./types";
 
 export default ({todosCount}: ITodoHeaderProps): JSX.Element => {
     return (
-        <div>
+        <div className="my-3">
             <span>
-                {todosCount === 0 ? `You have ${todosCount} task` : `You have ${todosCount} tasks`}
+                {todosCount === 1 ? `You have ${todosCount} task` : `You have ${todosCount} tasks`}
             </span>
         </div>
     )
