@@ -1,7 +1,11 @@
 import React from 'react'
 
-export default () => {
+export default ({todosCount}: any): JSX.Element => {
     return (
-        <div></div>
+        <div>
+            <span>
+                {todosCount?.length === 0 ? `You have ${todosCount} task` : `You have ${todosCount} tasks`}
+            </span>
+        </div>
     )
 }
